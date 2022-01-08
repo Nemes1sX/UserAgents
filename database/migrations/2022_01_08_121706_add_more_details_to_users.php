@@ -15,9 +15,10 @@ class AddMoreDetailsToUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('phone');
-            $table->integer('age');      
+            $table->integer('age');
+            $table->foreignIdFor(\App\Models\Agent::class)->constrained();
             $table->string('address')->nullable();
-            $table->string('password')->nullable(false)->change();    
+            $table->string('password')->nullable(false)->change();
         });
     }
 
@@ -29,8 +30,9 @@ class AddMoreDetailsToUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('phone', 'age', 'address');
-            $table->string('password')->nullable(true)->change();    
+            $table->dropConstrainedForeignId('agent_id');
+            $table->dropColumn('phone', 'age', 'address', 'agent_id');
+            $table->string('password')->nullable(true)->change();
         });
     }
 }
