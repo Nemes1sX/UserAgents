@@ -19,6 +19,7 @@ class UserSeed extends Seeder
         User::factory(20)->create([
             'phone' => $faker->numerify('###-###-####'),
             'age' => $faker->numberBetween(18, 80),
+            'address' => $faker->address,
             'agent_id' => $faker->unique()->numberBetween(1, Agent::count())
         ]);
     }

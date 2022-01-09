@@ -3,12 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Interfaces\IUserRepository;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
+    protected $users;
+
+    public function __construct(IUserRepository $users) {
+        $this->users = $users;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +23,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        return new UserResource(User::all());
+        $user = $this->users->index();
+        //dd($user);
+        return UserResource::collection($user);
     }
 
     /**

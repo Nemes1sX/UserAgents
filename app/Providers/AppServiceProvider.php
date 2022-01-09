@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Interfaces\IUserRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,6 +18,10 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->isLocal()) {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
+        $this->app->bind(IUserRepository::class, function () {
+            return new UserRepository();
+        });
+
     }
 
     /**
@@ -25,6 +31,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
     }
 }
