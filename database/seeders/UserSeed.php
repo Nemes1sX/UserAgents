@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Agent;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Faker\Generator as Faker;
@@ -16,11 +15,6 @@ class UserSeed extends Seeder
      */
     public function run(Faker $faker)
     {
-        User::factory(20)->create([
-            'phone' => $faker->numerify('###-###-####'),
-            'age' => $faker->numberBetween(18, 80),
-            'address' => $faker->address,
-            'agent_id' => $faker->unique()->numberBetween(1, Agent::count())
-        ]);
+        User::factory(20)->create();
     }
 }

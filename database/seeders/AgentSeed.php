@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 use App\Models\Agent;
-use Faker\Generator as Faker;
 
 
 class AgentSeed extends Seeder
@@ -15,12 +13,8 @@ class AgentSeed extends Seeder
      *
      * @return void
      */
-    public function run(Faker $faker)
+    public function run()
     {
-        for ($i = 1; $i <= 10; $i++) {
-            Agent::create([
-                'username' => strval(rand(100000, 999999)),
-            ]);
-        }
+        Agent::factory(10)->create();
     }
 }
