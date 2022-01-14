@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use Faker\Generator as Faker;
 
 class UserSeed extends Seeder
 {
@@ -13,7 +12,7 @@ class UserSeed extends Seeder
      *
      * @return void
      */
-    public function run(Faker $faker)
+    public function run()
     {
         User::factory(20)->create();
     }

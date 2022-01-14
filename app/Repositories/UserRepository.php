@@ -19,41 +19,48 @@ class UserRepository implements IUserRepository
         return $user;
     }
 
-    public function create(Agent  $agent, int $age, string $address,
-                           string $phone, string $username, string $email, string $password): User
+    public function create(int $agentId, int $age, string $address = null,
+                           string $phone, string $name, string $email, string $password = null): User
     {
         $user = User::create([
             'age' => $age,
+            'agent_id' => $agentId,
             'address' => $address,
             'email' => $email,
-            'username' => $username,
+            'name' => $name,
             'password' => bcrypt($password),
             'phone' => $phone,
         ]);
 
-        $agent->user()->save($user);
 
         return $user;
     }
 
-    public function update(Agent  $agent, User $user, int $age, string $address, string $phone, string $username,
-                           string $email, string $password): User
+    public function update(User $user, int $agentId = null, int $age = null, string $address = null, string $phone = null,
+                           string $name = null, string $email = null, string $password = null): User
     {
-        $user->age = $age;
-        $user->address = $address;
-        $user->email = $email;
-        $user->username = $username;
-        $user->password = bcrypt($password);
-        $user->phone = $phone;
+        if ($agentId != $user->agent_id) {
+            $agent = Agent::findOrFail($agentId);
+            $agent->user()->save($user);
+        }
 
-        $agent->user()->save($user);
+        $user->age = $age ?? $user->age;
+        $user->address = $address ?? $user->address;
+        $user->email = $email ?? $user->email;
+        $user->name = $name ?? $user->name;
+        $user->password = bcrypt($password) ?? $user->password;
+        $user->phone = $phone ?? $user->phone;
+
+        $user->save();
 
         return $user;
     }
 
     public function destroy(User $user) : void
     {
-        $user->agent()->delete();
+        $agent = Agent::findOrFail($user->agent_id);
+        $agent->user()->delete($user);
+
         $user->delete();
     }
 }

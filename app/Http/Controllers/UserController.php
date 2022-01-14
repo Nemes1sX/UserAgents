@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserController extends Controller
 {
@@ -23,11 +25,11 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() : string
+    public function index() : JsonResource
     {
-        $user = $this->users->index();
-        //dd($user);
-        return UserResource::collection($user);
+        $users = $this->users->index();
+
+        return new UserResource($users);
     }
 
     /**
@@ -36,12 +38,12 @@ class UserController extends Controller
      * @param  \App\Http\Requests\StoreUserRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUserRequest $request, Agent $agent) : string
+    public function store(StoreUserRequest $request) : JsonResource
     {
-        $user = $this->users->create($agent, $request->age, $request->address, $request->phone, $request->username,
-            $request->email, $request->password);
+        $user = $this->users->create($request->agent_id, $request->age, $request->address, $request->phone,
+            $request->name, $request->email, $request->password);
 
-        return UserResource::collection($user);
+        return new UserResource($user);
     }
 
     /**
@@ -50,11 +52,11 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user) : string
+    public function show(User $user) : JsonResource
     {
         $user = $this->users->show($user);
 
-        return UserResource::collection($user);
+        return new UserResource($user);
     }
 
     /**
@@ -64,12 +66,12 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUserRequest $request, User $user, Agent $agent) : string
+    public function update(UpdateUserRequest $request, User $user) : JsonResource
     {
-        $user = $this->users->update($agent, $user, $request->age, $request->address, $request->phone, $request->username,
-            $request->email, $request->password);
+        $user = $this->users->update($user, $request->age, $request->agentId, $request->address, $request->phone,
+            $request->username, $request->email, $request->password);
 
-        return UserResource::collection($user);
+        return new UserResource($user);
     }
 
     /**

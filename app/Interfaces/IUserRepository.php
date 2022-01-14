@@ -12,11 +12,11 @@ interface IUserRepository {
 
     public function show(User $user) : User;
 
-    public function create(Agent $agent, int $age, string $address,
+    public function create(int $agentId, int $age, string $address,
                            string $phone, string $username, string $email, string $password) : User;
 
 
-    public function update(Agent  $agent, User $user, int $age, string $address, string $phone, string $username,
+    public function update(User $user, int $agentId, int $age, string $address, string $phone, string $name,
                            string $email, string $password): User;
 
     public function destroy(User $user) : void;
