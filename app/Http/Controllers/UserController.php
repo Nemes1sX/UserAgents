@@ -25,11 +25,11 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() : JsonResource
+    public function index() : AnonymousResourceCollection
     {
         $users = $this->users->index();
 
-        return new UserResource($users);
+        return UserResource::collection($users);
     }
 
     /**
