@@ -36,7 +36,7 @@
             </thead>
             <tbody>
             <tr v-for="user in users" :key="user.id">
-                <td>{{ user.name }}</td>
+                <td><router-link :to="{name: 'user.show', params: {user: user.id}}">{{ user.name }}</router-link></td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.address }}</td>
                 <td>{{ user.phone}}</td>
@@ -44,9 +44,9 @@
                 <td>{{ user.created_at }}</td>
                 <td>
                     <div class="btn-group" role="group">
-                        <router-link :to="{name: 'user.edit', params: { user: user }}" class="btn btn-primary">Edit
+                        <router-link :to="{name: 'user.edit', params: { user: user.id }}" class="btn btn-primary">Edit
                         </router-link>
-                        <button class="btn btn-danger" @click="deleteUser(user)">Delete</button>
+                        <button class="btn btn-danger" @click="deleteUser(user.id)">Delete</button>
                     </div>
                 </td>
             </tr>

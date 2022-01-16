@@ -31,7 +31,9 @@ class StoreUserRequest extends FormRequest
             'address' => ['sometimes', 'string'],
             'email' => ['required', 'email', 'unique:users'],
             'phone' => ['required', 'regex:^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$^'],
-            'password' => ['present', 'min:6']
+            'password' => ['nullable', 'sometimes', 'min:6', 'confirmed'],
+            'confirm_password' => ['nullable', 'sometimes']
+
         ];
     }
 }

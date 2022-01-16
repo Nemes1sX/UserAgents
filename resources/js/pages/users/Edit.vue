@@ -8,7 +8,7 @@
                     <p v-for="error in v" :key="error" >{{ error }}</p>
                 </div>
             </div>
-            <form autocomplete="off" @submit.prevent="addUser">
+            <form autocomplete="off" @submit.prevent="editUser">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" id="name" class="form-control" placeholder="Organization" v-model="user.name">
@@ -35,17 +35,18 @@
                 </div>
                 <div class="form-group">
                     <label for="name">Confirm password</label>
-                    <input type="password" id="confirm_password" class="form-control" placeholder="Confirm password" v-model="user.password_confirmation">
+                    <input type="password" id="confirm_password" class="form-control" placeholder="Confirm password" v-model="user.confirm_password">
                 </div>
                 <div class="form-group">
                     <label for="agent">Agent</label>
                     <select class="form-control" v-model="user.agent_id">
-                       <option v-for="agent in agents"  v-bind:value="agent.id" :key="agent.id">{{agent.username}}</option>
+                        <option v-for="agent in agents"  v-bind:value="agent.id" :key="agent.id">{{agent.username}}</option>
                     </select>
                 </div>
 
 
                 <button type="submit" class="w-full btn btn-default btn-primary items-center hover:bg-primary-dar form-group">Create Company</button>
+                <router-link class="float-right btn-danger" :to="{name: 'user', params: {user: user.id}}">Delete</router-link>
 
             </form>
 
@@ -55,31 +56,31 @@
 
 <script>
 export default {
-    name: "Create",
+    name: "Edit",
     data() {
         return {
-            user: {},
+            user: [],
             agents: [],
             errors: []
         }
     },
     mounted() {
-        this.getAgents()
+        this.getAgents(),
+        this.getUser()
     },
     methods: {
-        addUser() {
-            console.log(this.user);
+        editUser() {
             this.axios
-                .post('http://localhost:8000/api/user', this.user)
+                .put('http://localhost:8000/api/user', this.user)
                 .then(() => {
                     this.$router.push({name: 'user'})
                 })
                 .catch(e => {
-                        if (e.response.status === 422) {
-                            console.log('Hello');
-                            this.errors = e.response.data.errors;
-                            console.log(this.errors);
-                        }})
+                    if (e.response.status === 422) {
+                        console.log('Hello');
+                        this.errors = e.response.data.errors;
+                    }
+                })
                 .finally(() => this.loading = false)
         },
         getAgents() {
@@ -91,13 +92,21 @@ export default {
                 })
                 .catch(error => console.log(error))
                 .finally(() => this.loading = false)
+        },
+        getUser() {
+            this.axios
+                .get(`http://127.0.0.1:8000/api/user/${this.$route.params.user}`)
+                .then(response => {
+                    this.user = response.data.data;
+                    console.log(this.agents);
+                })
+                .catch(error => console.log(error))
+                .finally(() => this.loading = false)
         }
-    },
+        },
 }
-
 </script>
 
 <style scoped>
-
 
 </style>
